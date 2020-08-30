@@ -1,7 +1,8 @@
-import { createConnection } from 'typeorm'
+import { createConnection, getConnectionOptions } from 'typeorm'
 
-createConnection({
-  name: 'gobarber',
-  type: 'sqlite',
-  database: './src/database/db.sqlite',
-})
+async function main() {
+  const connectionOptions = await getConnectionOptions()
+  await createConnection(connectionOptions)
+}
+
+main().catch(console.error)
