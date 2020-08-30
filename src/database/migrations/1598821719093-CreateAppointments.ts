@@ -12,6 +12,7 @@ export default class CreateAppointments1598821719093
             type: 'varchar',
             isPrimary: true,
             generationStrategy: 'uuid',
+            default: 'uuid_generate_v4()',
           },
           {
             name: 'provider',
@@ -20,8 +21,7 @@ export default class CreateAppointments1598821719093
           },
           {
             name: 'date',
-            // type: 'timestamp with time zone', // with postrgres
-            type: 'timestamp',
+            type: 'timestamp with time zone',
             isNullable: false,
           },
         ],

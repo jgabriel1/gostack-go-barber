@@ -8,8 +8,7 @@ class Appointment {
   @Column()
   provider: string
 
-  // @Column('timestamp with time zone') // when using postgres
-  @Column('timestamp')
+  @Column('timestamp with time zone')
   date: Date
 }
 
