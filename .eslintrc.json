@@ -24,7 +24,7 @@
   ],
   "rules": {
     "class-methods-use-this": "off",
-    "camelcase": "warn",
+    "camelcase": "off",
     "prettier/prettier": "error",
     "import/extensions": [
       "error",
