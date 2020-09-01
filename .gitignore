@@ -37,3 +37,6 @@ Thumbs.db
 # Ignore built ts files
 dist/**/*
 db.sqlite
+
+tmp/*
+!tmp/.gitkeep
