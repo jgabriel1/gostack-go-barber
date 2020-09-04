@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react'
+import React, { useRef, useCallback, useContext } from 'react'
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi'
 import { Form } from '@unform/web'
 import * as Yup from 'yup'
@@ -8,32 +8,47 @@ import Button from '../../components/Button'
 import Input from '../../components/Input'
 
 import getValidationErrors from '../../utils/getValidationErrors'
+import { AuthContext } from '../../context/AuthContext'
 
 import { Container, Content, Background } from './styles'
 
 import logo from '../../assets/logo.svg'
 
+interface SignInFormData {
+  email: string
+  password: string
+}
+
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null)
+  const { name, signIn } = useContext(AuthContext)
 
-  const handleSubmit = useCallback(async (data: any) => {
-    try {
-      formRef.current?.setErrors({})
+  const handleSubmit = useCallback(
+    async (data: SignInFormData) => {
+      try {
+        formRef.current?.setErrors({})
 
-      const schema = Yup.object().shape({
-        email: Yup.string()
-          .required('E-mail obrigatório.')
-          .email('Digite um e-mail válido.'),
-        password: Yup.string().required('Senha obrigatória.'),
-      })
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .required('E-mail obrigatório.')
+            .email('Digite um e-mail válido.'),
+          password: Yup.string().required('Senha obrigatória.'),
+        })
 
-      await schema.validate(data, { abortEarly: false })
-    } catch (err) {
-      const errors = getValidationErrors(err)
+        await schema.validate(data, { abortEarly: false })
 
-      formRef.current?.setErrors(Object.fromEntries(errors))
-    }
-  }, [])
+        await signIn({
+          email: data.email,
+          password: data.password,
+        })
+      } catch (err) {
+        const errors = getValidationErrors(err)
+
+        formRef.current?.setErrors(Object.fromEntries(errors))
+      }
+    },
+    [signIn],
+  )
 
   return (
     <Container>
