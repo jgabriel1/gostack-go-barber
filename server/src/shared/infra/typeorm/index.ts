@@ -1,5 +1,5 @@
 import { createConnection, getConnectionOptions } from 'typeorm'
-import { POSTGRES_URL } from '../config'
+import { POSTGRES_URL } from '@config/index'
 
 async function main() {
   const connectionOptions = await getConnectionOptions()
