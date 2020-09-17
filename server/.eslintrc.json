@@ -26,9 +26,21 @@
     "class-methods-use-this": "off",
     "camelcase": "off",
     "prettier/prettier": "warn",
-    "@typescript-eslint/no-unused-vars": ["error", {
-      "argsIgnorePattern": "_"
-    }],
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "_"
+      }
+    ],
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "interface",
+        "format": ["PascalCase"],
+        "prefix": ["I"]
+      }
+    ],
+    "no-useless-constructor": "off",
     "import/extensions": [
       "error",
       "ignorePackages",
