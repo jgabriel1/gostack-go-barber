@@ -7,11 +7,10 @@ module.exports = {
   type: "postgres",
   url: process.env.POSTGRES_URL,
   entities: [
-    "./src/modules/appointments/infra/typeorm/entities/*",
-    "./src/modules/users/infra/typeorm/entities/*",
+    "./src/modules/**/infra/typeorm/entities/*.ts",
   ],
-  migrations: ["./src/database/migrations/*.ts"],
+  migrations: ["./src/shared/infra/typeorm/migrations/*.ts"],
   cli: {
-    migrationsDir: "./src/database/migrations"
+    migrationsDir: "./src/shared/infra/typeorm/migrations"
   }
 }
