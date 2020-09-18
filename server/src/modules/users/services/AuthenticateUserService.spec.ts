@@ -2,11 +2,13 @@ import 'reflect-metadata'
 
 import AppError from '@shared/errors/AppError'
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository'
+
+import AuthenticateUserService from './AuthenticateUserService'
 import CreateUserService from './CreateUserService'
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider'
 
-describe('CreateUser', () => {
-  it('should be able to create a new user', async () => {
+describe('AuthenticateUser', () => {
+  it('should be able to authenticate', async () => {
     const fakeUsersRepository = new FakeUsersRepository()
     const fakeHashProvider = new FakeHashProvider()
 
@@ -14,21 +16,7 @@ describe('CreateUser', () => {
       fakeUsersRepository,
       fakeHashProvider,
     )
-
-    const user = await createUser.execute({
-      name: 'John Doe',
-      email: 'johndoe@doe.com',
-      password: 'supersecret123',
-    })
-
-    expect(user).toHaveProperty('id')
-  })
-
-  it('should not be able to create a new user with repeated e-mail', async () => {
-    const fakeUsersRepository = new FakeUsersRepository()
-    const fakeHashProvider = new FakeHashProvider()
-
-    const createUser = new CreateUserService(
+    const authenticateUser = new AuthenticateUserService(
       fakeUsersRepository,
       fakeHashProvider,
     )
@@ -39,12 +27,11 @@ describe('CreateUser', () => {
       password: 'supersecret123',
     })
 
-    const createUserWithSameEmail = createUser.execute({
-      name: 'John Doe da Silva',
+    const response = await authenticateUser.execute({
       email: 'johndoe@doe.com',
       password: 'supersecret123',
     })
 
-    expect(createUserWithSameEmail).rejects.toBeInstanceOf(AppError)
+    expect(response).toHaveProperty('token')
   })
 })
