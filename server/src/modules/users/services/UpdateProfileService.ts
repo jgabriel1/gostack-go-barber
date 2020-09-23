@@ -22,6 +22,22 @@ class UpdateProfileService {
     private hashProvider: IHashProvider,
   ) {}
 
+  private async checkIfEmailIsAvailable(
+    email: string,
+    user_id: string,
+  ): Promise<void> {
+    const anotherUserWithUpdatedEmail = await this.usersRepository.findByEmail(
+      email,
+    )
+
+    if (
+      anotherUserWithUpdatedEmail &&
+      anotherUserWithUpdatedEmail.id !== user_id
+    ) {
+      throw new AppError('This e-mail is already being used.')
+    }
+  }
+
   public async execute({
     user_id,
     name,
@@ -35,16 +51,7 @@ class UpdateProfileService {
       throw new AppError('User not found.', 404)
     }
 
-    const anotherUserWithUpdatedEmail = await this.usersRepository.findByEmail(
-      email,
-    )
-
-    if (
-      anotherUserWithUpdatedEmail &&
-      anotherUserWithUpdatedEmail.id !== user_id
-    ) {
-      throw new AppError('This e-mail is already being used.')
-    }
+    await this.checkIfEmailIsAvailable(email, user_id)
 
     user.name = name
     user.email = email
