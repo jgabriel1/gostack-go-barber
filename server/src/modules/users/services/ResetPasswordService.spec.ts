@@ -89,7 +89,3 @@ describe('ResetPassword', () => {
     ).rejects.toBeInstanceOf(AppError)
   })
 })
-
-// 2h expiração
-// userToken inexistente
-// user inexistente
