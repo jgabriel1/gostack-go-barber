@@ -20,6 +20,9 @@ module.exports = [
     type: 'mongodb',
     url: process.env.MONGO_URL,
     useUnifiedTopology: true,
+    useNewUrlParser: true,
+    retryWrites: true,
+    w: 'majority',
     entities: [
       './src/modules/**/infra/typeorm/schemas/*.ts',
     ],

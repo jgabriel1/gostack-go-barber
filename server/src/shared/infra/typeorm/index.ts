@@ -1,3 +1,6 @@
-import { createConnections } from 'typeorm'
+import { createConnection } from 'typeorm'
 
-createConnections().catch(console.error)
+Promise.all([
+  createConnection('default').then(() => console.log('Connected to postgres')),
+  createConnection('mongo').then(() => console.log('Connected to mongo')),
+]).catch(console.error)
