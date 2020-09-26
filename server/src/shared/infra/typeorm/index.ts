@@ -1,12 +1,6 @@
-import { createConnection, getConnectionOptions } from 'typeorm'
-import { POSTGRES_URL } from '@config/index'
+import { createConnection } from 'typeorm'
 
-async function main() {
-  const connectionOptions = await getConnectionOptions()
-
-  Object.assign(connectionOptions, { url: POSTGRES_URL })
-
-  await createConnection(connectionOptions)
-}
-
-main().catch(console.error)
+Promise.all([
+  createConnection('default').then(() => console.log('Connected to postgres')),
+  createConnection('mongo').then(() => console.log('Connected to mongo')),
+]).catch(console.error)
