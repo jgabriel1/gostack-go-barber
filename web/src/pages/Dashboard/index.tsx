@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { isToday, format } from 'date-fns'
+import { isToday, format, isAfter } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 import DayPicker, { DayModifiers } from 'react-day-picker'
 import { FiClock, FiPower } from 'react-icons/fi'
@@ -91,24 +91,28 @@ const Dashboard: React.FC = () => {
       })
   }, [selectedDate])
 
-  const disabledDays = useMemo(() => {
-    return monthAvailability
-      .filter(monthDay => !monthDay.available)
-      .map(monthDay => {
-        const year = currentMonth.getFullYear()
-        const month = currentMonth.getMonth()
+  const disabledDays = useMemo(
+    () =>
+      monthAvailability
+        .filter(monthDay => !monthDay.available)
+        .map(monthDay => {
+          const year = currentMonth.getFullYear()
+          const month = currentMonth.getMonth()
 
-        return new Date(year, month, monthDay.day)
-      })
-  }, [currentMonth, monthAvailability])
+          return new Date(year, month, monthDay.day)
+        }),
+    [currentMonth, monthAvailability],
+  )
 
-  const selectedDateAsText = useMemo(() => {
-    return format(selectedDate, "dd 'de' MMMM", { locale: ptBR })
-  }, [selectedDate])
+  const selectedDateAsText = useMemo(
+    () => format(selectedDate, "dd 'de' MMMM", { locale: ptBR }),
+    [selectedDate],
+  )
 
-  const selectedWeekDay = useMemo(() => {
-    return format(selectedDate, 'cccc', { locale: ptBR })
-  }, [selectedDate])
+  const selectedWeekDay = useMemo(
+    () => format(selectedDate, 'cccc', { locale: ptBR }),
+    [selectedDate],
+  )
 
   const morningAppointments = useMemo(
     () =>
@@ -122,6 +126,14 @@ const Dashboard: React.FC = () => {
     () =>
       appointments.filter(
         appointment => parseISO(appointment.date).getHours() >= 12,
+      ),
+    [appointments],
+  )
+
+  const nextAppointment = useMemo(
+    () =>
+      appointments.find(appointment =>
+        isAfter(parseISO(appointment.date), new Date()),
       ),
     [appointments],
   )
@@ -163,26 +175,32 @@ const Dashboard: React.FC = () => {
             <span>{selectedWeekDay}</span>
           </p>
 
-          <NextAppointment>
-            <strong>Atendimento a seguir</strong>
+          {isToday(selectedDate) && nextAppointment && (
+            <NextAppointment>
+              <strong>Agendamento a seguir</strong>
 
-            <div>
-              <img
-                src="https://avatars2.githubusercontent.com/u/62442043?s=460&v=4"
-                alt="Avatar"
-              />
+              <div>
+                <img
+                  src={nextAppointment.user.avatar_url}
+                  alt={nextAppointment.user.name}
+                />
 
-              <strong>José Gabriel</strong>
+                <strong>{nextAppointment.user.name}</strong>
 
-              <span>
-                <FiClock />
-                08:00
-              </span>
-            </div>
-          </NextAppointment>
+                <span>
+                  <FiClock />
+                  {nextAppointment.formattedHour}
+                </span>
+              </div>
+            </NextAppointment>
+          )}
 
           <Section>
             <strong>Manhã</strong>
+
+            {morningAppointments.length === 0 && (
+              <p>Nenhum agendamento nesse período.</p>
+            )}
 
             {morningAppointments.map(appointment => (
               <Appointment key={appointment.id}>
@@ -205,6 +223,10 @@ const Dashboard: React.FC = () => {
 
           <Section>
             <strong>Tarde</strong>
+
+            {afternoonAppointments.length === 0 && (
+              <p>Nenhum agendamento nesse período.</p>
+            )}
 
             {afternoonAppointments.map(appointment => (
               <Appointment key={appointment.id}>
