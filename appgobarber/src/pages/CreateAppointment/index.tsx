@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/Feather'
+import DateTimePicker from '@react-native-community/datetimepicker'
 
+import { Platform } from 'react-native'
 import { useAuth } from '../../hooks/auth'
 import api from '../../services/api'
 
@@ -16,6 +18,10 @@ import {
   ProviderContainer,
   ProviderAvatar,
   ProviderName,
+  Calendar,
+  CalendarTitle,
+  ShowDatePickerButton,
+  ShowDatePickerButtonText,
 } from './styles'
 
 interface RouteParams {
@@ -41,6 +47,9 @@ const CreateAppointment: React.FC = () => {
     routeParams.providerId,
   )
 
+  const [showDatePicker, setShowDatePicker] = useState(false)
+  const [selectedDate, setSelectedDate] = useState(new Date())
+
   useEffect(() => {
     api.get('providers').then(response => {
       setProviders(response.data)
@@ -53,6 +62,15 @@ const CreateAppointment: React.FC = () => {
 
   const handleSelectProvider = useCallback((providerId: string) => {
     setSelectedProvider(providerId)
+  }, [])
+
+  const handleToggleDatePicker = useCallback(() => {
+    setShowDatePicker(current => !current)
+  }, [])
+
+  const handleDateChanged = useCallback((_, date?: Date) => {
+    if (Platform.OS === 'android') setShowDatePicker(false)
+    if (date) setSelectedDate(date)
   }, [])
 
   return (
@@ -87,6 +105,25 @@ const CreateAppointment: React.FC = () => {
           )}
         />
       </ProvidersListContainer>
+
+      <Calendar>
+        <CalendarTitle>Escolha a data:</CalendarTitle>
+
+        <ShowDatePickerButton onPress={handleToggleDatePicker}>
+          <ShowDatePickerButtonText>
+            Selecionar outra data
+          </ShowDatePickerButtonText>
+        </ShowDatePickerButton>
+
+        {showDatePicker && (
+          <DateTimePicker
+            mode="date"
+            display="calendar"
+            onChange={handleDateChanged}
+            value={selectedDate}
+          />
+        )}
+      </Calendar>
     </Container>
   )
 }
