@@ -149,3 +149,18 @@ export const TimeSlotText = styled.Text<TimeSlotTextProps>`
   font-family: 'RobotoSlab-Regular';
   font-size: 16px;
 `
+
+export const CreateAppointmentButton = styled(RectButton)`
+  height: 50px;
+  background: #ff9000;
+  align-items: center;
+  justify-content: center;
+  margin: 0 24px 24px;
+  border-radius: 10px;
+`
+
+export const CreateAppointmentButtonText = styled.Text`
+  font-family: 'RobotoSlab-Medium';
+  font-size: 18px;
+  color: #232129;
+`
