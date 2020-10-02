@@ -1,4 +1,3 @@
-import { Platform } from 'react-native'
 import styled from 'styled-components/native'
 import { getBottomSpace } from 'react-native-iphone-x-helper'
 
