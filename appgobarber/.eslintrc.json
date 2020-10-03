@@ -1,6 +1,7 @@
 {
   "env": {
-    "es6": true
+    "es6": true,
+    "browser": true
   },
   "extends": [
     "plugin:react/recommended",
@@ -35,6 +36,8 @@
     "react/prop-types": "off",
     "@typescript-eslint/ban-types":"off",
     "no-unused-expressions": "off",
+    "camelcase": "off",
+    "import/no-duplicates": "off",
     "react/jsx-filename-extension": [
       1,
       {
