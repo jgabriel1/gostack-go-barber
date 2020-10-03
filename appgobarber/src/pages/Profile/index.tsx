@@ -39,7 +39,7 @@ interface ProfileFormData {
 }
 
 const Profile: React.FC = () => {
-  const { user, signOut, updateUser } = useAuth()
+  const { user, updateUser } = useAuth()
 
   const formRef = useRef<FormHandles>(null)
   const emailInputRef = useRef<TextInput>(null)
